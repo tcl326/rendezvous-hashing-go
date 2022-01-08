@@ -1,2 +1,2 @@
-# consistent-hashing-go
-consistent hashing in Golang
+# rendezvous-hashing-go
+Rendezvous Hashing in Golang
