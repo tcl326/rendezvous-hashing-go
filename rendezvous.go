@@ -71,18 +71,18 @@ func IntToFloat(value uint64) (float_value float64) {
 
 func (r *Rendezvous) ComputeWeightedScore(m WeightedMember, key []byte) (score float64) {
 	hash := r.hasher.Sum64(append([]byte(m.String()), key...))
-	score = 1.0 / -math.Log(IntToFloat(hash))
+	score = 1.0 / math.Log(IntToFloat(hash))
 	return m.Weight() * score
 }
 
 func (r *Rendezvous) LocateKey(key []byte) (member WeightedMember) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	highest_score := -1.0
+	lowest_score := 1.0
 	for _, _member := range r.members {
 		score := r.ComputeWeightedScore(*_member, key)
-		if score > highest_score {
-			highest_score = score
+		if score < lowest_score {
+			lowest_score = score
 			member = *_member
 		}
 	}
